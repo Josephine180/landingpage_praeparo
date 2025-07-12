@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praeparo - Plans d'Entraînement Personnalisés</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23ff6b35;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%23f7931e;stop-opacity:0.1" /></linearGradient></defs><rect width="1200" height="800" fill="url(%23grad1)"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ff6b35;
+        }
+
+        .section-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #cccccc;
+        }
+
+        /* L'équipe - Design moderne */
+        .team {
+            background: linear-gradient(135deg, rgba(255,165,0,0.08), rgba(255,109,45,0.05));
+            position: relative;
+        }
+
+        .team::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 165, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 109, 45, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .team-hero {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FFA500, #FF6D2D);
+        }
+
+        .team-hero-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .team-hero-image {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #FFA500, #FF6D2D);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(255, 165, 0, 0.3);
+        }
+
+        .avatar-emoji {
+            font-size: 3rem;
+        }
+
+        .avatar-decoration {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid rgba(255, 165, 0, 0.3);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .team-hero-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .team-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-role {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .team-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255, 165, 0, 0.15);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #FFA500;
+            font-weight: 500;
+        }
+
+        .team-story {
+            display: grid;
+            gap: 2.5rem;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 4px solid #FFA500;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+            color: #FFA500;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+
+        .story-text strong {
+            color: #FFA500;
+            font-weight: 600;
+        }
+
+        .skills-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 4px solid #FF6D2D;
+        }
+
+        .skills-title {
+            font-size: 1.5rem;
+            color: #FF6D2D;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 165, 0, 0.1);
+            border-color: rgba(255, 165, 0, 0.3);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            display: block;
+            font-weight: 600;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-tech {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .vision-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .vision-title {
+            font-size: 1.5rem;
+            color: #28a745;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .vision-quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border-left: 3px solid #28a745;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .vision-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: #28a745;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: serif;
+        }
+
+        .contact-section {
+            text-align: center;
+        }
+
+        .contact-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #FFA500, #FF6D2D);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.4);
+        }
+
+        .contact-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            text-align: center;
+            padding: 2rem 0;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .team-hero-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .team-name {
+                font-size: 1.8rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .team-badges {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">Praeparo</a>
+                <ul class="nav-links">
+                    <li><a href="#equipe">L'équipe</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Praeparo</h1>
+                <p>Des plans d'entraînement personnalisés pour la course à pied, adaptés à votre niveau et vos objectifs.</p>
+                <a href="#equipe" class="cta-button">Découvrir</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Histoire -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">L'Histoire de Praeparo</h2>
+            <div class="section-content">
+                <p>Praeparo est né d'une passion personnelle pour la course à pied et de la frustration de trouver des plans d'entraînement génériques qui ne s'adaptaient pas aux besoins individuels.</p>
+                <p>Notre mission est de créer des programmes d'entraînement sur mesure qui évoluent avec vous et s'adaptent à votre progression.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- L'équipe -->
+    <section id="equipe" class="section team">
+        <div class="container">
+            <h2 class="section-title">L'équipe</h2>
+            
+            <!-- Team Hero -->
+            <div class="team-hero">
+                <div class="team-hero-content">
+                    <div class="team-hero-image">
+                        <div class="avatar">
+                            <span class="avatar-emoji">👩‍💻</span>
+                        </div>
+                        <div class="avatar-decoration"></div>
+                    </div>
+                    <div class="team-hero-text">
+                        <h3 class="team-name">Développeuse Passionnée</h3>
+                        <p class="team-role">Créatrice de Praeparo</p>
+                        <div class="team-badges">
+                            <span class="badge">🎓 Holberton School</span>
+                            <span class="badge">🏃‍♀️ Runner</span>
+                            <span class="badge">💻 Dev en reconversion</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story -->
+            <div class="team-story">
+                <div class="story-content">
+                    <h4 class="story-title">💡 L'histoire derrière Praeparo</h4>
+                    <p class="story-text">
+                        Actuellement étudiante à <strong>Holberton School</strong>, je développe Praeparo en tant que projet personnel 
+                        dans le cadre de ma reconversion professionnelle vers le développement web.
+                    </p>
+                    <p class="story-text">
+                        Passionnée de course à pied depuis plusieurs années, j'ai toujours été frustrée par le manque de 
+                        programmes d'entraînement vraiment personnalisés. C'est cette frustration qui m'a poussée à créer 
+                        Praeparo : combiner mes deux passions pour développer une solution qui répond à un vrai besoin.
+                    </p>
+                </div>
+
+                <!-- Skills -->
+                <div class="skills-section">
+                    <h4 class="skills-title">🛠️ Technologies utilisées</h4>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <span class="skill-icon">🎨</span>
+                            <span class="skill-name">Frontend</span>
+                            <span class="skill-tech">HTML, CSS, JavaScript</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-icon">⚙️</span>
+                            <span class="skill-name">Backend</span>
+                            <span class="skill-tech">Node.js, Express, Prisma</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-icon">💾</span>
+                            <span class="skill-name">Base de données</span>
+                            <span class="skill-tech">PostgreSQL</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-icon">🚀</span>
+                            <span class="skill-name">Déploiement</span>
+                            <span class="skill-tech">Docker</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vision -->
+                <div class="vision-section">
+                    <h4 class="vision-title">🎯 Ma vision</h4>
+                    <blockquote class="vision-quote">
+                        "Créer des outils qui accompagnent vraiment les coureurs dans leur progression, 
+                        en alliant technologie moderne et compréhension des besoins réels des sportifs."
+                    </blockquote>
+                    
+                    <div class="contact-section">
+                        <p class="contact-text">
+                            Praeparo est en constante évolution. N'hésitez pas à me faire vos retours 
+                            pour améliorer l'expérience !
+                        </p>
+                        <div class="contact-links">
+                            <a href="mailto:pierrejosephine09@gmail.com" class="contact-btn">
+                                <span class="contact-icon">📧</span>
+                                Contact
+                            </a>
+                            <a href="https://www.linkedin.com/in/josephine-pierre" target="_blank" class="contact-btn">
+                                <span class="contact-icon">💼</span>
+                                LinkedIn
+                            </a>
+                            <a href="https://github.com/Josephine180/praeparo" target="_blank" class="contact-btn">
+                                <span class="contact-icon">💻</span>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Praeparo. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+    </script>
+</body>
+</html>
